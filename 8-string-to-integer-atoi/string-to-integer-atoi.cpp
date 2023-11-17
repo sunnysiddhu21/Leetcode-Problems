@@ -1,22 +1,38 @@
 class Solution {
 public:
     int myAtoi(string s) {
-         int num = 0, i = 0, sign = 1;
-        while (i < s.size() && s[i] == ' ') {
-            i++;
+        long value=1;
+        long counter=1;
+        bool sign=false,starts=false;
+        for(int i=0;i<s.length();i++){
+            if(s[i]=='-') {sign=true;
+            if(i+1==s.length()||s[i+1]<48||s[i+1]>57)break;
+            continue;}
+            if(s[i]=='+') {sign=false;
+            if(i+1==s.length()||s[i+1]<48||s[i+1]>57)break;
+            continue;}
+            if(s[i]==' ')continue;
+            if(s[i]<48||s[i]>57)break;
+            else{
+                if(s[i]-48!=0||starts){value*=10;
+                counter*=10;
+               starts=true;}
+                value+=(s[i]-48);
+                     if(value-counter>2147483647){
+            if(sign)return INT_MIN;
+            return pow(2,31)-1;
         }
-        if (i < s.size() && (s[i] == '-' || s[i] == '+')) {
-            sign = (s[i] == '-') ? -1 : 1;
-            i++;
+            
+                if(i+1==s.length()||s[i+1]<48||s[i+1]>57)break;
+            }
         }
 
-        while (i < s.size() && isdigit(s[i])) {
-            if (num > INT_MAX / 10 || (num == INT_MAX / 10 && s[i] - '0' > 7)) {
-                return (sign == -1) ? INT_MIN : INT_MAX;
-            }
-            num = num * 10 + (s[i] - '0');
-            i++;
+        value-=counter;
+            if(value>2147483647){
+            if(sign)return INT_MIN;
+            return pow(2,31)-1;
         }
-        return num * sign;
+        if(sign)value*=-1;
+        return value;
     }
 };
