@@ -1,38 +1,32 @@
 class Solution {
 public:
-    int myAtoi(string s) {
-        long value=1;
-        long counter=1;
-        bool sign=false,starts=false;
-        for(int i=0;i<s.length();i++){
-            if(s[i]=='-') {sign=true;
-            if(i+1==s.length()||s[i+1]<48||s[i+1]>57)break;
-            continue;}
-            if(s[i]=='+') {sign=false;
-            if(i+1==s.length()||s[i+1]<48||s[i+1]>57)break;
-            continue;}
-            if(s[i]==' ')continue;
-            if(s[i]<48||s[i]>57)break;
-            else{
-                if(s[i]-48!=0||starts){value*=10;
-                counter*=10;
-               starts=true;}
-                value+=(s[i]-48);
-                     if(value-counter>2147483647){
-            if(sign)return INT_MIN;
-            return pow(2,31)-1;
+    int myAtoi(string str) {
+        int i = 0;
+        int sign = 1;
+        long result = 0;
+
+        // Skip leading whitespaces
+        while (i < str.length() && str[i] == ' ') {
+            i++;
         }
-            
-                if(i+1==s.length()||s[i+1]<48||s[i+1]>57)break;
+
+        // Check for optional sign character
+        if (i < str.length() && (str[i] == '+' || str[i] == '-')) {
+            sign = (str[i++] == '-') ? -1 : 1;
+        }
+
+        // Process digits
+        while (i < str.length() && isdigit(str[i])) {
+            result = result * 10 + (str[i++] - '0');
+
+            // Check for integer overflow
+            if (result * sign > INT_MAX) {
+                return INT_MAX;
+            } else if (result * sign < INT_MIN) {
+                return INT_MIN;
             }
         }
 
-        value-=counter;
-            if(value>2147483647){
-            if(sign)return INT_MIN;
-            return pow(2,31)-1;
-        }
-        if(sign)value*=-1;
-        return value;
+        return result * sign;
     }
 };
