@@ -18,39 +18,28 @@ public:
 
 class Solution {
 public:
-    Node* connect(Node* root) {
-        Node* levelStart = root;
-
-        while (levelStart) {
-            Node* current = levelStart;
-            Node* prev = nullptr;
-
-            while (current) {
-                if (current->left) {
-                    if (prev) {
-                        prev->next = current->left;
-                    } else {
-                        levelStart = current->left;
-                    }
-                    prev = current->left;
-                }
-
-                if (current->right) {
-                    if (prev) {
-                        prev->next = current->right;
-                    } else {
-                        levelStart = current->right;
-                    }
-                    prev = current->right;
-                }
-
-                current = current->next;
-            }
-
-            while (levelStart && !levelStart->left && !levelStart->right) {
-                levelStart = levelStart->next;
-            }
+void helper(Node* &root)//by refrence pass kiye hai taki changes originally reflect ho sake
+{
+    if(root==nullptr)
+    {
+        return;
+    }
+    if(root->left)
+    {
+        //agr left exist krta hai it mean ki obviou right v exist krta hai kyuki kisi v parent ka left and right dono hai question me de rkha hai inhone phle se hi
+        root->left->next=root->right;
+        //and agr root->next agr exist kr rha hai to use v jod do
+        if(root->next!=nullptr)
+        {
+            root->right->next=root->next->left;
         }
+    }
+    helper(root->left);
+    helper(root->right);
+}
+    Node* connect(Node* root) {
+        //lets do with the recursive solution
+        helper(root);
         return root;
     }
 };
