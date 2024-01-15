@@ -1,14 +1,16 @@
 class Solution {
 public:
-    int search(vector<int>& arr, int target) {
-        int n=arr.size();
-        int l=0,h=n-1;
+    int search(vector<int>& nums, int k) {
+        int n=nums.size();
+        int l=0;
+        int h=n-1;
+        
         while(l<=h){
             int mid=(l+h)/2;
-            if(arr[mid]==target) return mid;
+            if(nums[mid]==k) return mid;
 
-            if(arr[l]<=arr[mid]){
-                if(arr[l]<=target && target<=arr[mid]){
+            if(nums[l]<=nums[mid]){
+                if(nums[l]<=k && k<nums[mid]){
                     h=mid-1;
                 }
                 else{
@@ -16,7 +18,7 @@ public:
                 }
             }
             else{
-                if(arr[mid]<=target && target <=arr[h]){
+                if(nums[mid]<=k && k<=nums[h]){
                     l=mid+1;
                 }
                 else{
@@ -24,7 +26,6 @@ public:
                 }
             }
         }
-
         return -1;
     }
 };
