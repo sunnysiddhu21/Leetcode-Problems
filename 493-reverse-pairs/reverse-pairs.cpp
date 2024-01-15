@@ -1,52 +1,66 @@
 class Solution {
 public:
-    int merge(vector<int>&nums,int lo , int mid , int hi){
-        int cnt=0;
-        int j = mid+1;
-        for(int i=lo;i<=mid;i++ ){
-            while(j<=hi && nums[i] > 2LL*nums[j])j++;
+    void merge(vector<int> &arr, int low, int mid, int high) {
+        vector<int> temp; // temporary array
+        int left = low;      // starting index of left half of arr
+        int right = mid + 1;   // starting index of right half of arr
 
-            cnt+=(j-(mid+1));
-        }
-        vector<int> temp;
+        //storing elements in the temporary array in a sorted manner//
 
-        int left = lo;
-        int rig = mid+1;
-
-        while(left<=mid && rig <=hi){
-            if(nums[left]<nums[rig]){
-                temp.push_back(nums[left++]);
-            }else{
-                temp.push_back(nums[rig++]);
+        while (left <= mid && right <= high) {
+            if (arr[left] <= arr[right]) {
+                temp.push_back(arr[left]);
+                left++;
+            }
+            else {
+                temp.push_back(arr[right]);
+                right++;
             }
         }
-        while(left<=mid){
-            temp.push_back(nums[left++]);
+
+        // if elements on the left half are still left //
+
+        while (left <= mid) {
+            temp.push_back(arr[left]);
+            left++;
         }
 
-        while(rig<=hi){
-            temp.emplace_back(nums[rig++]);
+        //  if elements on the right half are still left //
+        while (right <= high) {
+            temp.push_back(arr[right]);
+            right++;
         }
 
-        for(int i = lo;i<=hi;i++){
-            nums[i]=temp[i-lo];
+        // transfering all elements from temporary to arr //
+        for (int i = low; i <= high; i++) {
+            arr[i] = temp[i - low];
+        }
+    }
+
+    int countPairs(vector<int> &arr, int low, int mid, int high) {
+        int right = mid + 1;
+        int cnt = 0;
+        for (int i = low; i <= mid; i++) {
+            while (right <= high && arr[i] > 2LL* arr[right]) right++;
+            cnt += (right - (mid + 1));
         }
         return cnt;
     }
 
-    int mergesort(vector<int>&nums,int lo , int hi){
-        if(lo>=hi)return 0;
-        int mid = (lo+hi)/2;
-        int inv = mergesort(nums,lo,mid);
-        inv+=mergesort(nums,mid+1,hi);
-        inv+=merge(nums,lo,mid,hi);
-        return inv;
+    int mergeSort(vector<int> &arr, int low, int high) {
+        int cnt = 0;
+        if (low >= high) return cnt;
+        int mid = (low + high) / 2 ;
+        cnt += mergeSort(arr, low, mid);  // left half
+        cnt += mergeSort(arr, mid + 1, high); // right half
+        cnt += countPairs(arr, low, mid, high); //Modification
+        merge(arr, low, mid, high);  // merging sorted halves
+        return cnt;
     }
 
 
-
     int reversePairs(vector<int>& nums) {
-        return mergesort(nums,0,nums.size()-1);
+        return mergeSort(nums,0,nums.size()-1);
     }
 };
 
