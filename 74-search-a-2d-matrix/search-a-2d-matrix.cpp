@@ -1,24 +1,16 @@
 class Solution {
 public:
-    bool searchMatrix(vector<vector<int>>& mat, int target) {
-        if(!mat.size()) return false;
-        int n=mat.size();
-        int m=mat[0].size();
-        int lo=0;
-        int hi=(n*m)-1;
-
-        while(lo<=hi){
-            int mid=(lo+(hi-lo)/2);
-            if(mat[mid/m][mid%m]==target){
-                return true;
-            }
-            if(mat[mid/m][mid%m]<target){
-                lo=mid+1;
-            }
-            else{
-                hi=mid-1;
-            }
+    bool searchMatrix(vector<vector<int>>& matrix, int x) {
+        int n=matrix.size();
+        int m=matrix[0].size();
+        if(n==0 || m==0) return -1;
+    
+        int row = 0, col = m-1;
+        while(row < n && col >= 0){
+            if(matrix[row][col] == x) return 1;
+            else if(matrix[row][col] < x) row++;
+            else if(matrix[row][col] > x) col--;
         }
-        return false;
+        return 0;
     }
 };
