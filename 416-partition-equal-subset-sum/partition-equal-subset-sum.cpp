@@ -24,26 +24,28 @@ public:
         }
         else{
             int k=tsum/2;
-            vector<vector<int>> dp(n,vector<int>(k+1,false));
+            vector<bool> prev(k + 1, false);
+            prev[0]=true;
             
-            for(int i=0; i<n; i++){
-                dp[i][0]=true;
-            }
+            
             if (nums[0] <= k)
-                dp[0][nums[0]] = true;
+                prev[nums[0]] = true;
 
             for(int i=1; i<n; i++){
+                vector<bool> cur(k + 1, false);
+                cur[0] = true;
                 for(int target=1; target<=k; target++){
-                    bool ntake=dp[i-1][target];
+                    bool ntake=prev[target];
                     bool take=false;
                     if(nums[i]<=target){
-                        take=dp[i-1][target-nums[i]];
+                        take=prev[target-nums[i]];
                     }
 
-                    dp[i][target]=(ntake || take);
+                    cur[target]=(ntake || take);
                 }
+                prev=cur;
             }
-            return dp[n-1][k];
+            return prev[k];
         }
     }
 };
