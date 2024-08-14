@@ -1,20 +1,23 @@
 class Solution {
 public:
-    int numDecodings(string s) {
-        if(s.length()==0 || s[0]=='0') return 0;
-        if(s.length()==1) return 1;
-        int cnt1=1,cnt2=1;
-        for(int i=1; i<s.length(); i++){
-            int d=s[i]-'0';
-            int dd=(s[i-1]-'0')*10+d;
-            int cnt=0;
-            if(d>0) cnt+=cnt2;
-            if(dd>=10 && dd<=26) cnt+=cnt1;
-            cnt1=cnt2;
-            cnt2=cnt;
-        }
-        return cnt2;
+    int numRecursive(string s, int ind,vector<int> &dp){
+        if(ind==s.length()) return 1;
 
-        
+        if(dp[ind]!=-1) return dp[ind];
+
+        if(s[ind]=='0') return 0;
+
+        int ways=numRecursive(s,ind+1,dp);
+
+        if(ind+1<s.length() && (s[ind]=='1' || (s[ind]=='2' && s[ind+1]<='6'))){
+            ways+=numRecursive(s,ind+2,dp);
+        }
+
+        return dp[ind]=ways;
+    }
+    int numDecodings(string s) {
+        int n=s.length();
+        vector<int> dp(n+1,-1);
+        return numRecursive(s,0,dp);
     }
 };
