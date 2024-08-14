@@ -1,7 +1,7 @@
 class Solution {
 public:
     
-    int integerBreakUtil(int ind,vector<int>&v,int sum,int &k){
+    int integerBreakUtil(int ind,vector<int>&v,int sum,int &k,vector<vector<int>>&dp){
         int n=v.size();
 
         if(ind==n || sum==n){
@@ -9,14 +9,16 @@ public:
             return 0;
         }
 
-        int ntake=integerBreakUtil(ind+1,v,sum,k);
+        if(dp[ind][sum]!=-1) return dp[ind][sum];
+
+        int ntake=integerBreakUtil(ind+1,v,sum,k,dp);
         int take=1;
         if(sum+v[ind]<=n){
             k++;
-            take=v[ind]*integerBreakUtil(ind,v,sum+v[ind],k);
+            take=v[ind]*integerBreakUtil(ind,v,sum+v[ind],k,dp);
         }
 
-        return max(take,ntake);
+        return dp[ind][sum]=max(take,ntake);
     }
 
     int integerBreak(int n) {
@@ -24,12 +26,13 @@ public:
         if(n==0) return 0;
         
         vector<int> v;
+        vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
         for(int i=1; i<=n; i++){
             v.push_back(i);
         }
 
         int k=0;
 
-        return integerBreakUtil(0,v,0,k);
+        return integerBreakUtil(0,v,0,k,dp);
     }
 };
