@@ -15,7 +15,16 @@ public:
     }
 
     int integerBreak(int n) {
-        vector<int> dp(n+1,-1);
-        return integerBreakUtil(n,dp);
+        vector<int> dp(n + 1, 0);
+        dp[1] = 1;  // Base case: The maximum product for 1 is itself
+
+        for (int i = 2; i <= n; ++i) {
+            for (int j = 1; j < i; ++j) {
+                // Considering both j and i-j to ensure the product maximizes
+                dp[i] = max(dp[i], max(j * (i - j), j * dp[i - j]));
+            }
+        }
+
+        return dp[n];
     }
 };
