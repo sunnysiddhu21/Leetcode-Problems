@@ -8,6 +8,7 @@ public:
 
         for(int i=1; i<=n-1; i++){
             int prod=i*max(n-i,integerBreakUtil(n-i,dp));
+            //  max(j * (i - j), j * dp[i - j])
             result=max(result,prod);
         }
 
@@ -21,7 +22,7 @@ public:
         for (int i = 2; i <= n; ++i) {
             for (int j = 1; j < i; ++j) {
                 // Considering both j and i-j to ensure the product maximizes
-                dp[i] = max(dp[i], max(j * (i - j), j * dp[i - j]));
+                dp[i] = max(dp[i], j*max((i - j),dp[i - j]));
             }
         }
 
