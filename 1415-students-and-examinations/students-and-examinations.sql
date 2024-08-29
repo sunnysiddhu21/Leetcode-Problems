@@ -1,12 +1,9 @@
-/* Write your PL/SQL query statement below */
-SELECT S.student_id, S.student_name, SUB.subject_name, 
-
-count(E.subject_name) AS attended_exams FROM Students S CROSS JOIN 
-
-Subjects SUB LEFT OUTER JOIN Examinations E ON 
-
-S.student_id = E.student_id AND SUB.subject_name = E.subject_name  
-
-GROUP BY S.student_id, S.student_name,SUB.subject_name ORDER BY 
-
-S.student_id, SUB.subject_name
+select s.student_id,s.student_name, sj.subject_name,count(e.student_id) as attended_exams
+from students as s 
+cross join subjects as sj
+left join examinations as e
+on s.student_id = e.student_id
+and sj.subject_name = e.subject_name
+group by 1,2,3
+order by 1,3
+;
