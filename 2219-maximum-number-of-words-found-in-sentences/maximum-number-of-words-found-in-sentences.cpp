@@ -3,17 +3,10 @@ public:
     int mostWordsFound(vector<string>& sentences) {
         int maxi = 0;
 
-        for(int i = 0; i < sentences.size(); i++) {
-            int cnt = 1; 
-            string temp = sentences[i];
-
-            for(int j = 0; j < temp.size(); j++) {
-                if(temp[j] == ' ') {
-                    cnt++; 
-                }
-            }
-            
-            maxi = max(maxi, cnt);
+        for (const string& sentence : sentences) {
+            // Count spaces and add 1 to get the word count
+            int wordCount = count(sentence.begin(), sentence.end(), ' ') + 1;
+            maxi = max(maxi, wordCount);
         }
 
         return maxi;
