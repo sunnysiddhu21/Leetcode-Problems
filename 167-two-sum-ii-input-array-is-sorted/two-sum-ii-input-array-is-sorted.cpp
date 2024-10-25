@@ -23,14 +23,19 @@ public:
 
     vector<int> twoSum(vector<int>& arr, int target) {
         int n=arr.size();
-        vector<int> ans;
-
-        for(int i=0; i<n; i++){
-            int mid=binarySearch(arr,target-arr[i],i);
-            if(mid!=-1){
-                return {i + 1, mid + 1};
+        int l=0;
+        int r=n-1;
+        
+        while(l<r){
+            int total=arr[l]+arr[r];
+            if(total==target){
+                return {l+1,r+1};
+            }else if(total>target){
+                r--;
+            }else{
+                l++;
             }
         }
-        return {};
+        return {-1,-1};
     }
 };
