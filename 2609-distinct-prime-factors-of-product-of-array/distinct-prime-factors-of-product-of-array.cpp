@@ -1,40 +1,28 @@
 class Solution {
 public:
-    vector<int> primeFactors(int n) {
-        vector<int> factors;
-
-        // Step 1: Divide by 2 until n is odd
-        while (n % 2 == 0) {
-            factors.push_back(2);
-            n /= 2;
-        }
-
-        // Step 2: Try odd factors from 3 upwards
-        for (int i = 3; i * i <= n; i += 2) {
-            while (n % i == 0) {
-                factors.push_back(i);
-                n /= i;
+    // Precompute prime factors for numbers up to 1000
+    vector<set<int>> precomputePrimeFactors(int maxNum) {
+        vector<set<int>> primeFactors(maxNum + 1);
+        
+        for (int i = 2; i <= maxNum; i++) {
+            if (primeFactors[i].empty()) { // `i` is a prime number
+                for (int j = i; j <= maxNum; j += i) {
+                    primeFactors[j].insert(i);
+                }
             }
         }
-
-        // Step 3: If n is still greater than 2, it must be a prime factor
-        if (n > 2) {
-            factors.push_back(n);
-        }
-
-        return factors;
+        return primeFactors;
     }
 
     int distinctPrimeFactors(vector<int>& nums) {
-        set<int> st;
+        const int MAX_NUM = 1000;
+        vector<set<int>> primeFactorsUpTo1000 = precomputePrimeFactors(MAX_NUM);
+        set<int> distinctPrimes;
 
         for (int num : nums) {
-            vector<int> factors = primeFactors(num);
-            for (int factor : factors) {
-                st.insert(factor);  // Insert each factor individually
-            }
+            distinctPrimes.insert(primeFactorsUpTo1000[num].begin(), primeFactorsUpTo1000[num].end());
         }
 
-        return st.size(); // The size of the set gives the number of unique prime factors
+        return distinctPrimes.size();
     }
 };
